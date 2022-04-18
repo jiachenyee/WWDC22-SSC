@@ -14,9 +14,13 @@ class CodeDropDelegate: DropDelegate {
     var codingViewModel: CodingViewModel
     var currentCode: Code
     
-    init(codingViewModel: CodingViewModel, currentCode: Code) {
+    var index: Int?
+    
+    init(codingViewModel: CodingViewModel, currentCode: Code, index: Int? = nil) {
         self.codingViewModel = codingViewModel
         self.currentCode = currentCode
+        
+        self.index = index
     }
     
     func dropEntered(info: DropInfo) {
@@ -96,7 +100,13 @@ class CodeDropDelegate: DropDelegate {
                     
                     var newCode = codingViewModel.allCode[currentCodeIndex]
                     
-                    newCode.closure = previousValue + [droppedCode]
+                    newCode.closure = previousValue
+                    
+                    if let index = index {
+                        newCode.closure?.insert(droppedCode, at: index)
+                    } else {
+                        newCode.closure?.append(droppedCode)
+                    }
                     
                     for code in hierarchy {
                         var mutableCode = code

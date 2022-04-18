@@ -6,16 +6,7 @@ class CodingViewModel: ObservableObject {
         Code(codeBlock: .vstack,
              closure:
                 Code(codeBlock: .image),
-                Code(codeBlock: .text),
-                Code(codeBlock: .vstack,
-                     closure:
-                        Code(codeBlock: .image),
-                     Code(codeBlock: .hstack,
-                          closure:
-                            Code(codeBlock: .image),
-                          Code(codeBlock: .text)
-                         )
-                 )
+                Code(codeBlock: .text)
             )
     ]
     

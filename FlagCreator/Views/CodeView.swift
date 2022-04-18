@@ -139,10 +139,12 @@ struct CodeView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(embeddedCode) { $embeddedLine in
                         if embeddedLine.closure == nil {
+                            
                             CodeView(selectedCode: $selectedCode,
                                      code: $embeddedLine, codingViewModel: codingViewModel)
                             .onDrop(of: [.swiftSource], delegate: CodeDropDelegate(codingViewModel: codingViewModel,
-                                                                                   currentCode: code))
+                                                                                   currentCode: code,
+                                                                                   index: embeddedCode.firstIndex(where: {$0.id == embeddedLine.id})))
                         } else {
                             CodeView(selectedCode: $selectedCode,
                                      code: $embeddedLine, codingViewModel: codingViewModel)
