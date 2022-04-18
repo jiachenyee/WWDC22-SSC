@@ -77,8 +77,6 @@ struct ContentView: View {
                     }
                 }
                 
-                InspectorView(codingViewModel: codingViewModel)
-                
                 if isDragging {
                     WindowManagerOverlayView(separatorTranslation: separatorTranslation)
                         .opacity(windowOverlayOpacity)
@@ -145,6 +143,8 @@ struct ContentView: View {
                             }
                     )
                 }
+                
+                InspectorView(codingViewModel: codingViewModel)
             }
         }
     }
