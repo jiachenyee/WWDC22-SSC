@@ -10,9 +10,10 @@ struct CodingView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        Text("""
+                GeometryReader { context in
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            Text("""
 **Use SwiftUI to design a flag**
 Tap the \(Image(systemName: "plus")) button in the navigation bar to add elements. Drag the indicator in the centre to show the editor or preview in full screen and customize `View`s with the floating *Attributes Inspector*.
 
@@ -30,27 +31,28 @@ Make use of the *Attributes Inspector* (the floating window), to customize your 
 
 To make our individual Views look better, we can add View Modifiers (or just modifiers). These are additional pieces of formatting and functionality “tacked on” to each View. To add modifiers into your code, select the View to edit and in the *Attributes Inspector*, select the \(Image(systemName: "paintbrush")).
 """)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        VStack(spacing: 16) {
-                            ForEach($codingViewModel.code) { $code in
-                                HStack {
-                                    CodeView(selectedCode: $codingViewModel.selectedCode,
-                                             code: $code, codingViewModel: codingViewModel)
-                                    
-                                    Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        
+                        Divider()
+                            .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            VStack(spacing: 16) {
+                                ForEach($codingViewModel.code) { $code in
+                                    HStack {
+                                        CodeView(selectedCode: $codingViewModel.selectedCode,
+                                                 code: $code, codingViewModel: codingViewModel)
+                                        Spacer()
+                                    }
                                 }
                             }
+                            .padding(4)
+                            .padding()
+                            .frame(minWidth: context.size.width)
                         }
-                        .padding(4)
-                        .padding()
                     }
                 }
             }

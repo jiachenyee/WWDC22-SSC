@@ -60,36 +60,35 @@ class CodeDropDelegate: DropDelegate {
             
             DispatchQueue.main.async { [self] in
                 
-                if let codeIndex = codingViewModel.code.firstIndex(where: { $0.id == uuid }) {
-                    codingViewModel.code.remove(at: codeIndex)
-                } else {
-                    let hierarchy = codingViewModel.getHierarchy(with: droppedCode)
-                    
-                    var newCode = currentCode
-                    
-                    for code in hierarchy {
-                        var mutableCode = code
-                        if let closureValue = code.closure {
-                            mutableCode.closure = closureValue
-                                .filter {
-                                    $0.id != uuid
+                guard !codingViewModel.code.contains(where: { $0.id == uuid }),
+                      !(codingViewModel.getHierarchy(with: currentCode) + [currentCode]).contains(where: { $0.id == droppedCode.id }) else { return }
+                
+                let hierarchy = codingViewModel.getHierarchy(with: droppedCode)
+                
+                var newCode = currentCode
+                
+                for code in hierarchy {
+                    var mutableCode = code
+                    if let closureValue = code.closure {
+                        mutableCode.closure = closureValue
+                            .filter {
+                                $0.id != uuid
+                            }
+                            .map {
+                                if $0.id == newCode.id {
+                                    return newCode
+                                } else {
+                                    return $0
                                 }
-                                .map {
-                                    if $0.id == newCode.id {
-                                        return newCode
-                                    } else {
-                                        return $0
-                                    }
-                                }
-                        }
-                        
-                        newCode = mutableCode
+                            }
                     }
-                    if let index = codingViewModel.code.firstIndex(where: {
-                        $0.id == newCode.id
-                    }) {
-                        codingViewModel.code[index] = newCode
-                    }
+                    
+                    newCode = mutableCode
+                }
+                if let index = codingViewModel.code.firstIndex(where: {
+                    $0.id == newCode.id
+                }) {
+                    codingViewModel.code[index] = newCode
                 }
                 
                 if let currentCodeIndex = codingViewModel.allCode.firstIndex(where: { $0.id == currentCode.id }),
@@ -103,7 +102,17 @@ class CodeDropDelegate: DropDelegate {
                     newCode.closure = previousValue
                     
                     if let index = index {
-                        newCode.closure?.insert(droppedCode, at: index)
+                        
+                        if info.location.y > 5 {
+                            if index + 1 > (newCode.closure?.count ?? 0) - 1 {
+                                newCode.closure?.insert(droppedCode, at: index + 1)
+                            } else {
+                                newCode.closure?.append(droppedCode)
+                            }
+                        } else {
+                            newCode.closure?.insert(droppedCode, at: index)
+                        }
+                        
                     } else {
                         newCode.closure?.append(droppedCode)
                     }
