@@ -42,8 +42,9 @@ struct FlagRaisingView: View {
             if showSceneKitView {
                 
                 if let flagImage = flagImage {
-                    VStack {
+                    ZStack(alignment: .bottom) {
                         SceneView(flagImage: flagImage)
+                            .edgesIgnoringSafeArea(.all)
                         HStack {
                             Button {
                                 

@@ -39,19 +39,14 @@ struct SceneView: UIViewRepresentable {
         lightNode1.position = SCNVector3(5, -10, 0)
         scene.rootNode.addChildNode(lightNode1)
         
-        // retrieve the SCNView
         let scnView = SCNView()
         
-        // set the scene to the view
         scnView.scene = scene
         
-        // allows the user to manipulate the camera
         scnView.allowsCameraControl = true
         
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        scnView.showsStatistics = false
         
-        // configure the view
         scnView.backgroundColor = UIColor.clear
         
         let flagNode = SCNNode()
