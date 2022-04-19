@@ -64,6 +64,7 @@ struct CodeView: View {
                             }
                             Spacer()
                         }
+                        .padding(.top, 8)
                     }
                     .onDrag {
                         code.itemProvider
@@ -122,6 +123,7 @@ struct CodeView: View {
                             }
                             Spacer()
                         }
+                        .padding(.top, 8)
                     }
                     .onDrag {
                         code.itemProvider
@@ -136,7 +138,7 @@ struct CodeView: View {
                     code.closure = newValue
                 }
                 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(embeddedCode) { $embeddedLine in
                         if embeddedLine.closure == nil {
                             
@@ -201,6 +203,7 @@ struct CodeView: View {
             }
             .padding(.leading, hasClosure ? 0 : 32)
         }
+        .padding(.bottom, 8)
         .foregroundColor(Color(code.codeBlock.color))
         .border(Color(code.codeBlock.color), width: selectedCode?.id == code.id ? 1 : 0)
         .font(.system(size: 16, weight: .regular, design: .monospaced))
