@@ -219,8 +219,9 @@ struct MyView: View {
                             }
                         }
                         .buttonStyle(.borderedProminent)
-                        .disabled(!issues.isEmpty)
+//                        .disabled(!issues.isEmpty)
                         .matchedGeometryEffect(id: "raiseButton", in: namespace)
+                        #warning("UNCOMMENT THE LINE ABOVE")
                     }
                 }
             }
