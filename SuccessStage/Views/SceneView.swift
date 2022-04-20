@@ -85,12 +85,12 @@ struct SceneView: UIViewRepresentable {
         let animationDuration = 10.0
         
         UIView.animate(withDuration: animationDuration) {
-            colorView.backgroundColor = [UIColor.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown].randomElement()!.withAlphaComponent(0.25)
+            colorView.backgroundColor = .systemRed.withAlphaComponent(0.25)
         }
         
         Timer.scheduledTimer(withTimeInterval: animationDuration, repeats: true) { _ in
             UIView.animate(withDuration: animationDuration) {
-                colorView.backgroundColor = [UIColor.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown].randomElement()!.withAlphaComponent(0.25)
+                colorView.backgroundColor = [UIColor.systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown].randomElement()!.withAlphaComponent(0.25)
             }
         }
         colorView.translatesAutoresizingMaskIntoConstraints = false

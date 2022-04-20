@@ -40,8 +40,9 @@ struct FlagRaisingView: View {
                 .onAppear {
                     Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
                         flagContainerView.backgroundColor = .clear
-                        print(flagContainerView.intrinsicContentSize)
+                        
                         let renderer = UIGraphicsImageRenderer(size: flagContainerView.bounds.size)
+                        
                         flagImage = renderer.image { ctx in
                             flagContainerView.drawHierarchy(in: flagContainerView.bounds, afterScreenUpdates: true)
                         }
@@ -82,7 +83,6 @@ struct FlagRaisingView: View {
                             }
                         }
                         raiseCount += 1
-                        
                     }
                     .buttonStyle(.borderedProminent)
                     .matchedGeometryEffect(id: "raiseButton", in: namespace)
@@ -101,12 +101,8 @@ struct FlagRaisingView: View {
                             }
                             .buttonStyle(.borderedProminent)
                             
-                            Button {
-                                UIImageWriteToSavedPhotosAlbum(flagImage, nil, nil, nil)
-                            } label: {
-                                Label("Download Flag", systemImage: "photo")
-                            }
-                            .buttonStyle(.bordered)
+                            DownloadFlagButton(text: "Download Flag", systemImage: "photo", image: flagImage)
+                                .buttonStyle(.bordered)
                         }
                         .padding()
                     }
@@ -126,12 +122,8 @@ struct FlagRaisingView: View {
                             }
                             .buttonStyle(.borderedProminent)
                             
-                            Button {
-                                UIImageWriteToSavedPhotosAlbum(flagImage, nil, nil, nil)
-                            } label: {
-                                Label("Download Flag", systemImage: "photo")
-                            }
-                            .buttonStyle(.bordered)
+                            DownloadFlagButton(text: "Download Flag", systemImage: "photo", image: flagImage)
+                                .buttonStyle(.bordered)
                         }
                         .padding()
                     }
