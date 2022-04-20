@@ -110,13 +110,12 @@ class ARViewController: UIViewController {
         virtualObjectInteraction.selectedObject = nil
         
         let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = [.horizontal, .vertical]
+        configuration.planeDetection = [.horizontal]
+        
         if #available(iOS 12.0, *) {
             configuration.environmentTexturing = .automatic
         }
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-
-//        statusViewController.scheduleMessage("FIND A SURFACE TO PLACE AN OBJECT", inSeconds: 7.5, messageType: .planeEstimation)
     }
 
     // MARK: - Focus Square
