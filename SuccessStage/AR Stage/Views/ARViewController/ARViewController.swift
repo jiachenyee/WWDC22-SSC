@@ -23,10 +23,7 @@ class ARViewController: UIViewController {
     
     var focusSquare: FocusSquare? = FocusSquare()
     
-    /// The view controller that displays the status and "restart experience" UI.
-//    lazy var statusViewController: StatusViewController = {
-//        return children.lazy.compactMap({ $0 as? StatusViewController }).first!
-//    }()
+    var toastView: UIVisualEffectView!
     
     // MARK: - ARKit Configuration Properties
     
@@ -64,6 +61,8 @@ class ARViewController: UIViewController {
             NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: sceneView, attribute: .top, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: sceneView, attribute: .bottom, multiplier: 1, constant: 0)
         ])
+        
+        setUpToastView()
     }
     
     override func viewDidLoad() {

@@ -16,6 +16,7 @@ extension ARViewController {
         
         focusSquare?.removeFromParentNode()
         focusSquare = nil
+        hideToast()
     }
     
     func createTrackedRaycastAndSet3DPosition(of virtualObject: VirtualObject, from query: ARRaycastQuery,
