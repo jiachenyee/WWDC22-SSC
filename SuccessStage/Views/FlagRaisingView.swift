@@ -9,6 +9,12 @@ import Foundation
 import SwiftUI
 import SceneKit
 
+enum SuccessStage {
+    case _2DScene
+    case _3DScene
+    case arScene
+}
+
 struct FlagRaisingView: View {
     
     var namespace: Namespace.ID
@@ -20,10 +26,12 @@ struct FlagRaisingView: View {
     let flagHeight = ((200.0 / 3) * 2)
     
     @State var raiseCount = 0
-    @State var showSceneKitView = false
     
     @State var flagImage: UIImage?
     @State var flagContainerView = UIView()
+    
+    @State var successStage: SuccessStage = ._2DScene
+    
     var body: some View {
         ZStack {
             HoldingView(content: FlagView(namespace: nil, code: code, flagWidth: flagWidth, hasShadow: false) .frame(width: flagWidth), view: $flagContainerView)
@@ -39,33 +47,9 @@ struct FlagRaisingView: View {
                         }
                     }
                 }
-            if showSceneKitView {
-                
-                if let flagImage = flagImage {
-                    ZStack(alignment: .bottom) {
-                        SceneView(flagImage: flagImage)
-                            .edgesIgnoringSafeArea(.all)
-                        HStack {
-                            Button {
-                                
-                            } label: {
-                                Label("View in AR", systemImage: "arkit")
-                            }
-                            .buttonStyle(.borderedProminent)
-                            
-                            Button {
-                                UIImageWriteToSavedPhotosAlbum(flagImage, nil, nil, nil)
-                            } label: {
-                                Label("Download Flag", systemImage: "photo")
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                        .padding()
-                    }
-                } else {
-                    Text("No image")
-                }
-            } else {
+            
+            switch successStage {
+            case ._2DScene:
                 VStack {
                     Text("You did it!")
                         .font(.headline)
@@ -91,7 +75,7 @@ struct FlagRaisingView: View {
                     
                     Button("Raise") {
                         if raiseCount >= 10 {
-                            showSceneKitView = true
+                            successStage = ._3DScene
                         } else {
                             withAnimation {
                                 flagOffset -= (flagPoleHeight - flagHeight) / 10
@@ -103,6 +87,56 @@ struct FlagRaisingView: View {
                     .buttonStyle(.borderedProminent)
                     .matchedGeometryEffect(id: "raiseButton", in: namespace)
                     .padding()
+                }
+            case ._3DScene:
+                if let flagImage = flagImage {
+                    ZStack(alignment: .bottom) {
+                        SceneView(flagImage: flagImage)
+                            .edgesIgnoringSafeArea(.all)
+                        HStack {
+                            Button {
+                                successStage = .arScene
+                            } label: {
+                                Label("View in AR", systemImage: "arkit")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button {
+                                UIImageWriteToSavedPhotosAlbum(flagImage, nil, nil, nil)
+                            } label: {
+                                Label("Download Flag", systemImage: "photo")
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding()
+                    }
+                } else {
+                    ProgressView()
+                }
+            case .arScene:
+                if let flagImage = flagImage {
+                    ZStack(alignment: .bottom) {
+                        ARView(flagImage: flagImage)
+                            .edgesIgnoringSafeArea(.all)
+                        HStack {
+                            Button {
+                                successStage = ._3DScene
+                            } label: {
+                                Label("View in 3D", systemImage: "cube")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button {
+                                UIImageWriteToSavedPhotosAlbum(flagImage, nil, nil, nil)
+                            } label: {
+                                Label("Download Flag", systemImage: "photo")
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding()
+                    }
+                } else {
+                    ProgressView()
                 }
             }
         }

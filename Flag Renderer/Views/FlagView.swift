@@ -28,7 +28,6 @@ struct FlagView: View {
             .scaleEffect(context.size.width / flagWidth, anchor: .topLeading)
         }
         .aspectRatio(3/2, contentMode: .fit)
-//        .matchedGeometryEffect(id: "flag", in: namespace)
         .modifier(CustomMatchedGeometryEffect(id: "flag", namespace: namespace))
     }
 }
