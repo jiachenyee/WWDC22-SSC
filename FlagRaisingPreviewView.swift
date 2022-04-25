@@ -26,6 +26,12 @@ struct FlagRaisingPreviewView: View {
     
     @State var isIssuesPopoverPresented = false
     
+    @FocusState var variableDeclarationIsFocused: Bool
+    @FocusState var variableNameIsFocused: Bool
+    @FocusState var raiseButtonActionIsFocused: Bool
+    
+    @State var hint = "Select a field to view hints"
+    
     var body: some View {
         HStack(spacing: 0) {
             if enterSplitScreen {
@@ -75,7 +81,7 @@ You can use the `-=` operator as a shorthand for `x = x - 10`
                                 
                                 Text("""
 **Try it out!**
-Using the information above, fill in the blanks below to make the flag raise.
+Using the information above, fill in the blanks below to make the flag raise. If you get lost, check out the **Hint** section.
 """)
                             }
                             .padding()
@@ -90,6 +96,7 @@ struct MyView: View {
 
 """)
                                     TextField("Type code here", text: $variableDeclaration)
+                                        .focused($variableDeclarationIsFocused)
                                         .font(.body.monospaced().bold())
                                         .padding(.leading, 42)
                                         .foregroundColor(.accentColor)
@@ -106,6 +113,7 @@ struct MyView: View {
                                         Text(".offset(y: ")
                                         
                                         TextField("Type code here", text: $variableName)
+                                            .focused($variableNameIsFocused)
                                             .font(.body.monospaced().bold())
                                             .foregroundColor(.accentColor)
                                         
@@ -119,6 +127,7 @@ struct MyView: View {
             Button("Raise!") {
 """)
                                     TextField("Type code that executes when button pressed", text: $raiseButtonAction)
+                                        .focused($raiseButtonActionIsFocused)
                                         .font(.body.monospaced().bold())
                                         .padding(.leading, 42 * 4)
                                         .foregroundColor(.accentColor)
@@ -154,6 +163,15 @@ struct MyView: View {
                             .listStyle(.plain)
                             .padding(.top)
                         }
+                    }
+                    .onChange(of: variableDeclarationIsFocused) { _ in
+                        computeHint()
+                    }
+                    .onChange(of: variableNameIsFocused) { _ in
+                        computeHint()
+                    }
+                    .onChange(of: raiseButtonActionIsFocused) { _ in
+                        computeHint()
                     }
                     .onChange(of: variableDeclaration) { _ in
                         computeIssues()
@@ -219,12 +237,44 @@ struct MyView: View {
                             }
                         }
                         .buttonStyle(.borderedProminent)
-//                        .disabled(!issues.isEmpty)
+                        .disabled(!issues.isEmpty)
                         .matchedGeometryEffect(id: "raiseButton", in: namespace)
-                        #warning("UNCOMMENT THE LINE ABOVE")
+                        
+                        ZStack(alignment: .topLeading) {
+                            Color(.systemGray5)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Hint")
+                                    .font(.headline)
+                                Text(hint)
+                            }
+                                .padding()
+                        }
+                        .cornerRadius(8)
+                        .frame(height: 100)
+                        .padding()
                     }
                 }
             }
+        }
+    }
+    
+    func computeHint() {
+        withAnimation {
+            if variableDeclarationIsFocused {
+                hint = "This is where you declare your @State variable."
+                return
+            }
+            if variableNameIsFocused {
+                hint = "This is where you pass in your variable name"
+                return
+            }
+            if raiseButtonActionIsFocused {
+                hint = "This is what happens when your button is tapped. In this case, you should decrement the @State variable."
+                return
+            }
+            
+            hint = "Select a field to view hints"
         }
     }
     
